@@ -1,15 +1,29 @@
-#include "Button.h"
+#include "FunctionalInterrupts/Function.hpp"
+#include "Input/CallbackButton.hpp"
 #include <Arduino.h>
 
-const int submitPin = 10;
+const int submitPin = 3;
 
-MotionToSD::Button submit{submitPin};
+void doShit();
+volatile bool doneShit = false;
 
-void setup() { Serial.begin(9600); }
+FunctionalInterrupts::Function doShitFunction{doShit};
+Input::CallbackButton submit{submitPin, doShitFunction};
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Hello");
+}
 
 void loop() {
   if (submit.Pressed())
     Serial.println("Pressed");
+  if (doneShit) {
+    Serial.println("Done shit");
+    doneShit = false;
+  }
 }
 
 void printErrorCode(int code) {}
+
+void doShit() { doneShit = true; }

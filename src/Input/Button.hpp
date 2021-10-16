@@ -28,7 +28,7 @@ protected:
   virtual void Update();
 
 public:
-  Button(int inPin);
+  Button(int inPin, bool internalPullUp = true);
   ~Button();
 
   bool Pressed();

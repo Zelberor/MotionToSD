@@ -23,17 +23,17 @@ void Button::Update() {
   previousReading = currentReading;
 }
 
-Button::Button(int inPin)
+Button::Button(int inPin, bool internalPullUp)
     : inPin(inPin), interruptBased{digitalPinToInterrupt(inPin) !=
                                    NOT_AN_INTERRUPT},
       UpdateFunction{&Button::Update, *this} {
+  pinMode(inPin, internalPullUp ? INPUT_PULLUP : INPUT);
+  previousReading = digitalRead(inPin);
+  Update();
   if (interruptBased) {
     FunctionalInterrupts::attachFunctionalInterrupt(
         digitalPinToInterrupt(inPin), &UpdateFunction, CHANGE);
   }
-  pinMode(inPin, INPUT);
-  previousReading = digitalRead(inPin);
-  Update();
 }
 Button::~Button() {
   if (interruptBased) {

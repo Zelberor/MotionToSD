@@ -14,7 +14,8 @@ protected:
   void Update() override;
 
 public:
-  CallbackButton(int inPin, const FunctionalInterrupts::A_Function &callback);
+  CallbackButton(int inPin, const FunctionalInterrupts::A_Function &callback,
+                 bool internalPullUp = true);
 };
 
 } // namespace Input

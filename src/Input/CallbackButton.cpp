@@ -9,7 +9,8 @@ void CallbackButton::Update() {
 }
 
 CallbackButton::CallbackButton(int inPin,
-                               const FunctionalInterrupts::A_Function &callback)
-    : Button{inPin}, CallbackFunction{&callback} {}
+                               const FunctionalInterrupts::A_Function &callback,
+                               bool internalPullUp)
+    : Button{inPin, internalPullUp}, CallbackFunction{&callback} {}
 
 } // namespace Input

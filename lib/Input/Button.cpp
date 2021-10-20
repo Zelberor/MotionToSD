@@ -19,8 +19,8 @@ void Button::Update() {
       releasedTime = currentTime;
       debounce.Set();
     }
+    previousReading = currentReading;
   }
-  previousReading = currentReading;
 }
 
 Button::Button(int inPin, bool internalPullUp)
@@ -32,7 +32,7 @@ Button::Button(int inPin, bool internalPullUp)
   Update();
   if (interruptBased) {
     FunctionalInterrupts::attachFunctionalInterrupt(
-        digitalPinToInterrupt(inPin), &UpdateFunction, RISING);
+        digitalPinToInterrupt(inPin), &UpdateFunction, CHANGE);
   }
 }
 Button::~Button() {

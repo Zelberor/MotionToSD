@@ -17,16 +17,14 @@ void RotaryEncoder::Update() {
   int clkState = digitalRead(clkPin);
 #endif
 
-  if (!debounce.Blocked()) {
-    if (previousClkReading == HIGH && clkState == LOW) {
-      if (cclkState == HIGH)
-        Increment();
-      else
-        Decrement();
-      debounce.Set();
-    }
+  if (!debounce.Blocked() && clkState != previousClkReading) {
+    if (cclkState != clkState)
+      Increment();
+    else
+      Decrement();
+    debounce.Set();
+    previousClkReading = clkState;
   }
-  previousClkReading = clkState;
 }
 
 RotaryEncoder::RotaryEncoder(int clkPin, int cclkPin, uint8_t steps)
@@ -37,7 +35,7 @@ RotaryEncoder::RotaryEncoder(int clkPin, int cclkPin, uint8_t steps)
   pinMode(clkPin, INPUT);
   pinMode(cclkPin, INPUT);
   FunctionalInterrupts::attachFunctionalInterrupt(digitalPinToInterrupt(clkPin),
-                                                  &UpdateFunction, FALLING);
+                                                  &UpdateFunction, CHANGE);
 }
 RotaryEncoder::~RotaryEncoder() {
   FunctionalInterrupts::detachFunctionalInterrupt(

@@ -14,8 +14,11 @@ private:
   volatile unsigned long pressedTime = 0;
   volatile unsigned long releasedTime = 0;
 
-  DebounceTimer debounce{};
-
+#ifndef BUTTON_DEBOUNCE
+  DebounceTimer debounce{500000};
+#else
+  DebounceTimer debounce{BUTTON_DEBOUNCE};
+#endif
 #ifndef BUTTON_EVENT_TIMEOUT
   const static unsigned long eventTimeOut = 1000;
 #else

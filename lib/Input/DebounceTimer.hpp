@@ -5,16 +5,12 @@ namespace Input {
 
 class DebounceTimer {
 private:
-#ifndef INPUT_DEBOUNCE
-  const static unsigned long debounce = 2500;
-#else
-  const static unsigned long debounce = INPUT_DEBOUNCE;
-#endif
+  const unsigned long debounce;
 
   volatile unsigned long lastTime = 0;
 
 public:
-  DebounceTimer();
+  DebounceTimer(unsigned long debounce = 500);
   bool Blocked() const;
   void Set();
   void Reset();

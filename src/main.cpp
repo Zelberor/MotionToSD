@@ -14,7 +14,7 @@ FunctionalInterrupts::Function doShitFunction{doShit};
 Input::CallbackButton submit{submitPin, doShitFunction};
 
 Input::Button reset{9};
-Input::RotaryEncoder rotary{18, 19, 20};
+Input::RotaryEncoder rotary{18, 19, 40};
 
 void setup() {
   DirectDigital::Setup();

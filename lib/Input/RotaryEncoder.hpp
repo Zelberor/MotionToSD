@@ -14,7 +14,11 @@ private:
   int previousClkReading = HIGH;
 
 protected:
-  DebounceTimer debounce{};
+#ifndef ROTARY_DEBOUNCE
+  DebounceTimer debounce{500};
+#else
+  DebounceTimer debounce{ROTARY_DEBOUNCE};
+#endif
 
   const FunctionalInterrupts::MemberFunction<RotaryEncoder> UpdateFunction;
 

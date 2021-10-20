@@ -4,7 +4,7 @@
 
 namespace Input {
 
-DebounceTimer::DebounceTimer() {}
+DebounceTimer::DebounceTimer(unsigned long debounce) : debounce{debounce} {}
 
 bool DebounceTimer::Blocked() const {
   unsigned long currentTime = micros();

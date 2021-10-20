@@ -2,7 +2,7 @@
 #define FUNCTIONAL_INTERRUPTS_H
 
 #include "A_Function.hpp"
-#include "inttypes.h"
+#include <inttypes.h>
 
 namespace FunctionalInterrupts {
 

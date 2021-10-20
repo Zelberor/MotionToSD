@@ -20,8 +20,8 @@
   Modified 1 August 2010 by Mark Sproul
 */
 
-#include "wiring_private.h"
 #include <inttypes.h>
+#include <wiring_private.h>
 
 #include "A_Function.hpp"
 #include "Function.hpp"

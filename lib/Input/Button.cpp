@@ -1,25 +1,25 @@
 #include "Button.hpp"
-#include "Arduino.h"
-#include "FunctionalInterrupts/FunctionalInterrupts.hpp"
+#include "FunctionalInterrupts.hpp"
+#include <Arduino.h>
 
 namespace Input {
 
-long Button::debounce = 100;
-long Button::pressedTimeOut = 1000;
-
 void Button::Update() {
   currentReading = digitalRead(inPin);
-  long currentTime = millis();
+  unsigned long currentTime = millis();
 
-  if (currentTime - lastTime > debounce) {
+  if (!debounce.Blocked()) {
     if (previousReading == HIGH && currentReading == LOW) {
       pressed = true;
-      lastTime = currentTime;
       pressedTime = currentTime;
+      debounce.Set();
+    }
+    if (previousReading == LOW && currentReading == HIGH) {
+      released = true;
+      releasedTime = currentTime;
+      debounce.Set();
     }
   }
-  if (previousReading == LOW && currentReading == HIGH)
-    lastTime = currentTime;
   previousReading = currentReading;
 }
 
@@ -32,7 +32,7 @@ Button::Button(int inPin, bool internalPullUp)
   Update();
   if (interruptBased) {
     FunctionalInterrupts::attachFunctionalInterrupt(
-        digitalPinToInterrupt(inPin), &UpdateFunction, CHANGE);
+        digitalPinToInterrupt(inPin), &UpdateFunction, RISING);
   }
 }
 Button::~Button() {
@@ -42,12 +42,22 @@ Button::~Button() {
   }
 }
 
+void Button::Reset() {
+  currentReading = digitalRead(inPin);
+  previousReading = currentReading;
+  pressedTime = 0;
+  releasedTime = 0;
+  released = false;
+  pressed = false;
+  debounce.Reset();
+}
+
 bool Button::Pressed() {
   if (!interruptBased) {
     Update();
   }
-  long currentTime = millis();
-  if (pressed && currentTime - pressedTime < pressedTimeOut) {
+  unsigned long currentTime = millis();
+  if (pressed && currentTime - pressedTime < eventTimeOut) {
     pressed = false;
     return true;
   }
@@ -58,6 +68,17 @@ bool Button::Hold() {
   if (!interruptBased)
     Update();
   return (currentReading == LOW);
+}
+
+bool Button::Released() {
+  if (!interruptBased)
+    Update();
+  unsigned long currentTime = millis();
+  if (released && currentTime - releasedTime < eventTimeOut) {
+    released = false;
+    return true;
+  }
+  return false;
 }
 
 } // namespace Input

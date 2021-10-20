@@ -1,12 +1,14 @@
 #ifndef CALLBACK_BUTTON_H
 #define CALLBACK_BUTTON_H
 
+#include "A_Function.hpp"
 #include "Button.hpp"
-#include "FunctionalInterrupts/A_Function.hpp"
 
 namespace Input {
 
 class CallbackButton : public Button {
+private:
+  volatile bool callBackExecuted = false;
 
 protected:
   const FunctionalInterrupts::A_Function *CallbackFunction;

@@ -4,8 +4,12 @@ namespace Input {
 
 void CallbackButton::Update() {
   Button::Update();
-  if (pressed)
+  if (pressed && !callBackExecuted) {
     (*CallbackFunction)();
+    callBackExecuted = true;
+  } else if (released) {
+    callBackExecuted = false;
+  }
 }
 
 CallbackButton::CallbackButton(int inPin,

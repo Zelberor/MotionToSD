@@ -15,7 +15,7 @@ private:
   volatile unsigned long releasedTime = 0;
 
 #ifndef BUTTON_DEBOUNCE
-  DebounceTimer debounce{500000};
+  DebounceTimer debounce{50000};
 #else
   DebounceTimer debounce{BUTTON_DEBOUNCE};
 #endif
